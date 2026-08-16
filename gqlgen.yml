@@ -1,0 +1,22 @@
+schema:
+  - schema/*.graphql
+
+exec:
+  filename: internal/adapters/graphql/generated/exec.go
+  package: generated
+
+model:
+  filename: internal/adapters/graphql/generated/models.go
+  package: generated
+
+resolver:
+  filename: internal/adapters/graphql/resolver.go
+  type: Resolver
+
+models:
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.ID
+  DateTime:
+    model:
+      - github.com/99designs/gqlgen/graphql.Time

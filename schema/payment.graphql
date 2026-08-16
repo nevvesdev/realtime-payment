@@ -1,0 +1,70 @@
+scalar DateTime
+scalar Decimal
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum SettlementStatus {
+  PENDING
+  SETTLED
+  FAILED
+}
+
+type Payment {
+  id: ID!
+  accountId: ID!
+  amount: Decimal!
+  currency: String!
+  status: PaymentStatus!
+  description: String
+  idempotencyKey: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  settlement: Settlement
+}
+
+type Settlement {
+  id: ID!
+  paymentId: ID!
+  settlementDate: DateTime!
+  status: SettlementStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PaymentEvent {
+  id: ID!
+  paymentId: ID!
+  eventType: String!
+  createdAt: DateTime!
+}
+
+input CreatePaymentInput {
+  accountId: ID!
+  amount: Decimal!
+  currency: String!
+  description: String
+  idempotencyKey: String!
+}
+
+type Query {
+  payment(id: ID!): Payment
+  payments(accountId: ID!, limit: Int, offset: Int): [Payment!]!
+  settlement(id: ID!): Settlement
+  paymentEvents(paymentId: ID!): [PaymentEvent!]!
+}
+
+type Mutation {
+  createPayment(input: CreatePaymentInput!): Payment!
+  cancelPayment(id: ID!): Payment!
+}
+
+type Subscription {
+  paymentStatusChanged(accountId: ID!): Payment!
+  settlementStatusChanged(paymentId: ID!): Settlement!
+}
