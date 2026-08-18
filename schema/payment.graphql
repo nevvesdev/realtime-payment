@@ -25,7 +25,6 @@ type Payment {
   idempotencyKey: String!
   createdAt: DateTime!
   updatedAt: DateTime!
-  settlement: Settlement
 }
 
 type Settlement {
